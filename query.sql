@@ -1,1 +1,32 @@
--- sedang dikerjakan
+CREATE DATABASE game
+
+use game
+
+CREATE TABLE IF NOT EXISTS users(
+	userID INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS product_category(
+	categoryID INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50)
+)
+
+CREATE TABLE IF NOT EXISTS products(
+	productID INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    price INT NOT NULL,
+    quantity INT NOT NULL,
+    categoryID INT NOT NULL,
+    FOREIGN KEY (categoryID) REFERENCES product_category(categoryID)
+)
+
+CREATE TABLE IF NOT EXISTS transactions(
+	trxID INT AUTO_INCREMENT PRIMARY KEY,
+	userID INT NOT NULL,
+	productID INT NOT NULL,
+	purchasedAt DATE NOT NULL,
+	FOREIGN KEY (userID) REFERENCES users(userID),
+	FOREIGN KEY (productID) REFERENCES products(productID)
+)
