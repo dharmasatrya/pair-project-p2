@@ -1,4 +1,4 @@
-## ERD Title: Video Game Store System
+## ERD Title: Toko Game Gacor
 
 1. Entities and Their Attributes:
 Entity: Table_Name (e.g., Customers)
@@ -9,69 +9,53 @@ Entity: Table_Name (e.g., Customers)
 - Field (Datatype)
 - etc...
 
-A. Entity: developers
+A. Entity: users
 
 - Attributes:
-- developerID: PK AI 
-- studioName: VARCHAR UNIQUE NOT NULL
-- location: VARCHAR NOT NULL
+- userID: PK AI 
+- name: VARCHAR(50) NOT NULL
+- email: VARCHAR(50) NOT NULL
 
-B. Entity: games
-
-- Attributes:
-- gameID: PK AI 
-- name: VARCHAR UNIQUE NOT NULL
-- price: DECIMAL(10,2) NOT NULL
-- releaseDate: DATE NOT NULL
-
-C. Entity: players
+B. Entity: product_category
 
 - Attributes:
-- playerID: PK AI 
-- name: VARCHAR NOT NULL
-- email: VARCHAR UNIQUE NOT NULL
+- categoryID: PK AI 
+- name: VARCHAR(50)
+
+C. Entity: products
+
+- Attributes:
+- productID: PK AI 
+- name: VARCHAR(50) NOT NULL
+- price: INT
+- quantity: INT
+- Category FK product_category.categoryID
 
 D. Entity: transactions
 
 - Attributes:
 - trxID: PK AI 
-- gameID: FK games.gameID
+- userID: FK users.userID
 - playerID: FK players.playerID
 - purchasedAt: DATE
-
-E. Entity: player_interactions
-
-- Attributes:
-- interactionID: PK AI 
-- gameID: FK games.gameID
-- playerID: FK players.playerID
-- hoursPlayed: INT
 
 ## Relationships:
 - Table_Name to Table_Name: (e.g., Customers to Orders)
 
 A. Type: One to Many
-- Description: One developer can have many games.
-- developers to games
+- Description: One user can have many transactions.
+- users to transactions
 
 B. Type: One to Many
-- Description: One games can have many transactions
-- games to transactions
+- Description: One category product can have many products.
+- product_category to products
 
 C. Type: One to Many
-- Description: One player can have many transactions
-- players to transactions
-
-D. Type: One to Many
-- Description: One player can have many games interracted
-- players to player_interactions
-
-E. Type: One to Many
-- Description: One game can have many players interracted
-- games to player_interactions
+- Description: One product can have many transactions.
+- products to transactions
 
 ## Integrity Constraints:
 - self explanatory
 
 ## Note
-- hoursPlayed will be calculated later (just an example of 1 interaction)
+- etc ...
