@@ -55,7 +55,7 @@ func (c *CLI) showMenu() {
 	if choice == 1 {
 		for {
 			fmt.Println("Select function:")
-			fmt.Println("1. Delete Product by ID")
+			fmt.Println("1. Update Product Category by ID")
 			fmt.Println("2. Buy Product")
 			fmt.Println("3. Update Name User by ID")
 			fmt.Println("4. Create New Category")
@@ -126,10 +126,14 @@ func (c *CLI) showMenu() {
 func (c *CLI) updateProductCategoryById() {
 	var id int
 	var name string
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Please input the ID of the product that you want to update: ")
 	fmt.Scanln(&id)
 	fmt.Println("Please input the new Name of the product category")
-	fmt.Scanln(&name)
+	if scanner.Scan() {
+		name = scanner.Text()
+	}
 	err := c.Handler.UpdateProductCategoryById(id, name)
 	if err != nil {
 		log.Print("Error listing most popular games: ", err)
@@ -140,6 +144,7 @@ func (c *CLI) updateProductCategoryById() {
 func (c *CLI) updateNameUserById() {
 	var id int
 	var name string
+	scanner := bufio.NewScanner(os.Stdin)
 
 	//masukin id user
 	fmt.Println("Please input the ID of the user that you want to update")
@@ -147,7 +152,9 @@ func (c *CLI) updateNameUserById() {
 
 	//masukin nama user yang baru
 	fmt.Println("Please input the new Name of user")
-	fmt.Scanln(&name)
+	if scanner.Scan() {
+		name = scanner.Text()
+	}
 	err := c.Handler.UpdateNameUserById(id, name)
 	if err != nil {
 		log.Println("Error update name: ", err)
