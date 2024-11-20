@@ -10,10 +10,13 @@ import (
 
 // Handler is the handler interface
 type Handler interface {
+	UpdateProductCategoryById(id int, newName string) error
+	BuyProduct(userID, productID int) error
 	ShowUserSpending() error
 	ShowOrders(month, year int) error
 	ShowStocks() error
-	SebuahFucntionCRUD() error
+	ShowProductByCategoryId(id int) error
+	ShowProductCategories() error
 }
 
 // HandlerImpl is the handler implementation
@@ -29,17 +32,39 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 }
 
 // FUNCTIONS BUAT CRUD
-func (h *HandlerImpl) SebuahFucntionCRUD() error {
+func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
+
+	fmt.Printf("ini id yang ada di handler -> %v", id)
+
 	rows, err := h.DB.Query(`
-	QUERY CRUD
-`)
+	UPDATE product_categories
+	SET name = ?
+	WHERE categoryID = ?;
+	`, newName, id)
 	if err != nil {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
 	defer rows.Close()
 
-	fmt.Println("crud selesai")
+	fmt.Println("product category name has been changed")
+
+	return nil
+}
+
+func (h *HandlerImpl) BuyProduct(userID, productID int) error {
+
+	rows, err := h.DB.Query(`
+	INSERT INTO transactions (userID, productID, purchasedAt)
+	VALUES (?, ?, NOW());
+	`, userID, productID)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("You have successfully purchased the item")
 
 	return nil
 }
@@ -180,6 +205,79 @@ func (h *HandlerImpl) ShowStocks() error {
 		//print data
 		fmt.Printf("Category: %s | Product Name: %s | Available Stock: %d\n",
 			category_name, product_name, current_quantity)
+	}
+
+	return nil
+}
+
+func (h *HandlerImpl) ShowProductByCategoryId(id int) error {
+	rows, err := h.DB.Query(`
+		SELECT 
+			p.name AS product_name,
+			p.price AS price,
+			p.quantity AS stock
+		FROM 
+			products p
+		JOIN 
+			product_categories c ON p.categoryID = c.categoryID
+		WHERE 
+			p.categoryID = ?;
+	`, id)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	//looping data
+	for rows.Next() {
+		var product_name string
+		var price, stock int
+
+		//check error
+		err = rows.Scan(&product_name, &price, &stock)
+		if err != nil {
+			log.Print("Error scanning record: ", err)
+			return err
+		}
+		//print data
+		fmt.Printf("Name: %s | Price: Rp %d | Available Stock: %d\n",
+			product_name, price, stock)
+	}
+
+	return nil
+}
+
+func (h *HandlerImpl) ShowProductCategories() error {
+	fmt.Println("masuk handler")
+	rows, err := h.DB.Query(`
+	SELECT
+		categoryID AS id,
+		name AS categories
+	FROM
+		product_categories;
+	`)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("List of product category")
+	//looping data
+	for rows.Next() {
+		var id int
+		var categories string
+
+		//check error
+		err = rows.Scan(&id, &categories)
+		if err != nil {
+			log.Print("Error scanning record: ", err)
+			return err
+		}
+		//print data
+		fmt.Printf("%v: %s\n",
+			id, categories)
 	}
 
 	return nil
