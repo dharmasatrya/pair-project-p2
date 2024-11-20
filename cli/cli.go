@@ -56,10 +56,11 @@ func (c *CLI) showMenu() {
 			fmt.Println("Select function:")
 			fmt.Println("1. Delete Product by ID")
 			fmt.Println("2. Buy Product")
-			fmt.Println("3. Exit")
+			fmt.Println("3. Update Name User by ID")
+			fmt.Println("4. Exit")
 			fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
 			_, err := fmt.Scanln(&choice)
-			if err != nil || choice < 1 || choice > 2 {
+			if err != nil || choice < 1 || choice > 4 {
 				fmt.Println("Invalid option. Please enter a number between 1 and 3.")
 				continue
 			}
@@ -72,6 +73,8 @@ func (c *CLI) showMenu() {
 		case 2:
 			c.buyProduct()
 		case 3:
+			c.updateNameUserById()
+		case 4:
 			fmt.Println("Thanks For Using this CLI!")
 			os.Exit(0)
 		}
@@ -125,6 +128,23 @@ func (c *CLI) updateProductCategoryById() {
 	err := c.Handler.UpdateProductCategoryById(id, name)
 	if err != nil {
 		log.Print("Error listing most popular games: ", err)
+		log.Fatal(err)
+	}
+}
+
+func (c *CLI) updateNameUserById() {
+	var id int
+	var name string
+	//masukin id user
+	fmt.Println("Please input the ID of the user that you want to update")
+	fmt.Scanln(&id)
+
+	//masukin nama user yang baru
+	fmt.Println("Please input the new Name of user")
+	fmt.Scanln(&name)
+	err := c.Handler.UpdateNameUserById(id, name)
+	if err != nil {
+		log.Println("Error update name: ", err)
 		log.Fatal(err)
 	}
 }

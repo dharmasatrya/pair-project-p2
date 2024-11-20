@@ -11,6 +11,7 @@ import (
 // Handler is the handler interface
 type Handler interface {
 	UpdateProductCategoryById(id int, newName string) error
+	UpdateNameUserById(id int, newName string) error
 	BuyProduct(userID, productID int) error
 	ShowUserSpending() error
 	ShowOrders(month, year int) error
@@ -48,6 +49,23 @@ func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
 	defer rows.Close()
 
 	fmt.Println("product category name has been changed")
+
+	return nil
+}
+
+func (h *HandlerImpl) UpdateNameUserById(id int, newName string) error {
+	rows, err := h.DB.Query(`
+	UPDATE users
+	SET name = ?
+	WHERE userID = ?;
+	`, newName, id)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("name user has been changed")
 
 	return nil
 }
