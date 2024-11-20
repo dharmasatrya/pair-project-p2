@@ -28,6 +28,22 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 	}
 }
 
+// FUNCTIONS BUAT CRUD
+func (h *HandlerImpl) SebuahFucntionCRUD() error {
+	rows, err := h.DB.Query(`
+	QUERY CRUD
+`)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("crud selesai")
+
+	return nil
+}
+
 // FUNCTION BUAT NAMPILIN REPORT
 func (h *HandlerImpl) ShowUserSpending() error {
 	rows, err := h.DB.Query(`
@@ -54,17 +70,18 @@ ORDER BY
 	fmt.Println("Total Game Sales Report:")
 	//looping data
 	for rows.Next() {
-		var GAME_NAME string
-		var TOTAL_SALES int
+		var user_name string
+		var total_spending int
 
 		//check error
-		err = rows.Scan(&GAME_NAME, &TOTAL_SALES)
+		err = rows.Scan(&user_name, &total_spending)
 		if err != nil {
 			log.Print("Error scanning record: ", err)
 			return err
 		}
 		//print data
-		fmt.Printf("Game: %v, Total Sales: %v\n", GAME_NAME, TOTAL_SALES)
+		fmt.Printf("User Name: %s | Total Money Spent: Rp %d\n",
+			user_name, total_spending)
 	}
 
 	return nil
@@ -116,7 +133,7 @@ func (h *HandlerImpl) ShowOrders(month, year int) error {
 		}
 
 		// Print each transaction
-		fmt.Printf("Transaction ID: %d | User: %s (%s) | Product: %s | Price: %d | Date: %s\n",
+		fmt.Printf("Transaction ID: %d | User: %s (%s) | Product: %s | Price: Rp %d | Date: %s\n",
 			transactionID, userName, userEmail, productName, productPrice, purchaseDate)
 	}
 
@@ -131,7 +148,16 @@ func (h *HandlerImpl) ShowOrders(month, year int) error {
 
 func (h *HandlerImpl) ShowStocks() error {
 	rows, err := h.DB.Query(`
-		
+		SELECT 
+			pc.name AS category_name,
+			p.name AS product_name,
+			p.quantity AS current_quantity
+		FROM 
+			products p
+		JOIN 
+			product_categories pc ON p.categoryID = pc.categoryID
+		ORDER BY 
+			pc.name, p.name;
 	`)
 	if err != nil {
 		log.Print("Error fetching records: ", err)
@@ -142,33 +168,19 @@ func (h *HandlerImpl) ShowStocks() error {
 	fmt.Println("Total Game Sales Report:")
 	//looping data
 	for rows.Next() {
-		var GAME_NAME string
-		var TOTAL_SALES int
+		var category_name, product_name string
+		var current_quantity int
 
 		//check error
-		err = rows.Scan(&GAME_NAME, &TOTAL_SALES)
+		err = rows.Scan(&category_name, &product_name, &current_quantity)
 		if err != nil {
 			log.Print("Error scanning record: ", err)
 			return err
 		}
 		//print data
-		fmt.Printf("Game: %v, Total Sales: %v\n", GAME_NAME, TOTAL_SALES)
+		fmt.Printf("Category: %s | Product Name: %s | Available Stock: %d\n",
+			category_name, product_name, current_quantity)
 	}
-
-	return nil
-}
-
-func (h *HandlerImpl) SebuahFucntionCRUD() error {
-	rows, err := h.DB.Query(`
-	QUERY CRUD
-`)
-	if err != nil {
-		log.Print("Error fetching records: ", err)
-		return err
-	}
-	defer rows.Close()
-
-	fmt.Println("crud selesai")
 
 	return nil
 }
