@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"game/handler"
 	"log"
+	"os"
 )
 
 type CLI struct {
@@ -44,6 +45,11 @@ func (c *CLI) showMenu() {
 		break
 	}
 
+	if choice == 3 {
+		fmt.Println("Byebye")
+		return
+	}
+
 	//CRUD options
 	if choice == 1 {
 		//bisa dilanjutin dari sini mas Jaya
@@ -58,10 +64,10 @@ func (c *CLI) showMenu() {
 			fmt.Println("2. Show Users Spending")
 			fmt.Println("3. Show Current Stocks")
 			fmt.Println("4. Go Back")
-			fmt.Println("4. Exit")
-			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4): ")
+			fmt.Println("5. Exit")
+			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4/5): ")
 			_, err := fmt.Scanln(&choice)
-			if err != nil || choice < 1 || choice > 4 {
+			if err != nil || choice < 1 || choice > 5 {
 				fmt.Println("Invalid option. Please enter a number between 1 and 5.")
 				continue
 			}
@@ -79,13 +85,8 @@ func (c *CLI) showMenu() {
 			c.showMenu()
 		case 5:
 			fmt.Println("Thanks For Using this CLI!")
-			return
+			os.Exit(0)
 		}
-	}
-
-	if choice == 3 {
-		fmt.Println("Byebye")
-		return
 	}
 
 	c.showMenu()
