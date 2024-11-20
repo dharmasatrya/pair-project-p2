@@ -52,7 +52,29 @@ func (c *CLI) showMenu() {
 
 	//CRUD options
 	if choice == 1 {
-		//bisa dilanjutin dari sini mas Jaya
+		for {
+			fmt.Println("Select function:")
+			fmt.Println("1. Delete Product by ID")
+			fmt.Println("2. Buy Product")
+			fmt.Println("3. Exit")
+			fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
+			_, err := fmt.Scanln(&choice)
+			if err != nil || choice < 1 || choice > 2 {
+				fmt.Println("Invalid option. Please enter a number between 1 and 3.")
+				continue
+			}
+			break
+		}
+
+		switch choice {
+		case 1:
+			c.updateProductCategoryById()
+		case 2:
+			c.buyProduct()
+		case 3:
+			fmt.Println("Thanks For Using this CLI!")
+			os.Exit(0)
+		}
 	}
 
 	//REPORTING options
@@ -93,10 +115,46 @@ func (c *CLI) showMenu() {
 }
 
 // CRUD FUNCTIONS
-func (c *CLI) sebuahFucntionCRUD() {
-	err := c.Handler.SebuahFucntionCRUD()
+func (c *CLI) updateProductCategoryById() {
+	var id int
+	var name string
+	fmt.Println("Please input the ID of the product that you want to update: ")
+	fmt.Scanln(&id)
+	fmt.Println("Please input the new Name of the product category")
+	fmt.Scanln(&name)
+	err := c.Handler.UpdateProductCategoryById(id, name)
 	if err != nil {
 		log.Print("Error listing most popular games: ", err)
+		log.Fatal(err)
+	}
+}
+
+func (c *CLI) buyProduct() {
+	var categoryID, productID, userID int
+
+	//masukin id user
+	fmt.Println("Please input your ID")
+	fmt.Scanln(&userID)
+
+	//munculkan category
+	errCategories := c.Handler.ShowProductCategories()
+	if errCategories != nil {
+		log.Print("Error buying product: ", errCategories)
+		log.Fatal(errCategories)
+	}
+
+	//munculkan product dari kategori pilihan
+	fmt.Println("Please input category id: ")
+	fmt.Scanln(&categoryID)
+	c.Handler.ShowProductByCategoryId(categoryID)
+
+	//beli product
+	fmt.Println("Please input the id of the product")
+	fmt.Scanln(&productID)
+
+	err := c.Handler.BuyProduct(productID, userID)
+	if err != nil {
+		log.Print("Error buying product: ", err)
 		log.Fatal(err)
 	}
 }
