@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
 	"game/handler"
 	"log"
@@ -156,10 +157,13 @@ func (c *CLI) updateNameUserById() {
 
 func (c *CLI) createNewCategory() {
 	var name string
+	scanner := bufio.NewScanner(os.Stdin)
 
-	//masukin nama ketegori yang ingin ditambah
 	fmt.Println("Please input Name Category")
-	fmt.Scanln(&name)
+	if scanner.Scan() {
+		name = scanner.Text()
+		fmt.Println("You entered:", name)
+	}
 	err := c.Handler.CreateNewCategory(name)
 	if err != nil {
 		log.Print("Error create new category product: ", err)
