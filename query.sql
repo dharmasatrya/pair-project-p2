@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR(50) NOT NULL
 )
 
-CREATE TABLE IF NOT EXISTS product_category(
+CREATE TABLE IF NOT EXISTS product_categories(
 	categoryID INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50)
 )
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS products(
     price INT NOT NULL,
     quantity INT NOT NULL,
     categoryID INT NOT NULL,
-    FOREIGN KEY (categoryID) REFERENCES product_category(categoryID)
+    FOREIGN KEY (categoryID) REFERENCES product_categories(categoryID)
 )
 
 CREATE TABLE IF NOT EXISTS transactions(
