@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
 	"game/handler"
 	"log"
@@ -56,11 +57,14 @@ func (c *CLI) showMenu() {
 			fmt.Println("Select function:")
 			fmt.Println("1. Delete Product by ID")
 			fmt.Println("2. Buy Product")
-			fmt.Println("3. Exit")
+			fmt.Println("3. Update Name User by ID")
+			fmt.Println("4. Create New Category")
+			fmt.Println("5. Exit")
 			fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
 			_, err := fmt.Scanln(&choice)
-			if err != nil || choice < 1 || choice > 2 {
+			if err != nil || choice < 1 || choice > 5 {
 				fmt.Println("Invalid option. Please enter a number between 1 and 3.")
+				fmt.Scanln()
 				continue
 			}
 			break
@@ -72,6 +76,10 @@ func (c *CLI) showMenu() {
 		case 2:
 			c.buyProduct()
 		case 3:
+			c.updateNameUserById()
+		case 4:
+			c.createNewCategory()
+		case 5:
 			fmt.Println("Thanks For Using this CLI!")
 			os.Exit(0)
 		}
@@ -125,6 +133,40 @@ func (c *CLI) updateProductCategoryById() {
 	err := c.Handler.UpdateProductCategoryById(id, name)
 	if err != nil {
 		log.Print("Error listing most popular games: ", err)
+		log.Fatal(err)
+	}
+}
+
+func (c *CLI) updateNameUserById() {
+	var id int
+	var name string
+
+	//masukin id user
+	fmt.Println("Please input the ID of the user that you want to update")
+	fmt.Scanln(&id)
+
+	//masukin nama user yang baru
+	fmt.Println("Please input the new Name of user")
+	fmt.Scanln(&name)
+	err := c.Handler.UpdateNameUserById(id, name)
+	if err != nil {
+		log.Println("Error update name: ", err)
+		log.Fatal(err)
+	}
+}
+
+func (c *CLI) createNewCategory() {
+	var name string
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Please input Name Category")
+	if scanner.Scan() {
+		name = scanner.Text()
+		fmt.Println("You entered:", name)
+	}
+	err := c.Handler.CreateNewCategory(name)
+	if err != nil {
+		log.Print("Error create new category product: ", err)
 		log.Fatal(err)
 	}
 }
