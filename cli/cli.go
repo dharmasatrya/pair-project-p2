@@ -28,30 +28,79 @@ func (c *CLI) Init() {
 }
 
 func (c *CLI) showMenu() {
-	fmt.Println("Select report to generate:")
-	fmt.Println("1. show orders")
-	fmt.Println("2. function crud")
-	fmt.Println("3. Exit")
-
 	var choice int
-	fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
-	fmt.Scan(&choice)
 
-	switch choice {
-	case 1:
-		c.showOrders()
-	case 2:
-		c.sebuahFucntionCRUD()
-	case 3:
-		fmt.Println("bubye!")
+	for {
+		fmt.Println("Select function:")
+		fmt.Println("1. function crud")
+		fmt.Println("2. Reportings")
+		fmt.Println("3. Exit")
+		fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
+		_, err := fmt.Scanln(&choice)
+		if err != nil || choice < 1 || choice > 3 {
+			fmt.Println("Invalid option. Please enter a number between 1 and 3.")
+			continue
+		}
+		break
+	}
+
+	//CRUD options
+	if choice == 1 {
+		//bisa dilanjutin dari sini mas Jaya
+	}
+
+	//REPORTING options
+	if choice == 2 {
+
+		for {
+			fmt.Println("Select report to generate:")
+			fmt.Println("1. Show Orders")
+			fmt.Println("2. Show Users Spending")
+			fmt.Println("3. Show Current Stocks")
+			fmt.Println("4. Go Back")
+			fmt.Println("4. Exit")
+			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4): ")
+			_, err := fmt.Scanln(&choice)
+			if err != nil || choice < 1 || choice > 4 {
+				fmt.Println("Invalid option. Please enter a number between 1 and 5.")
+				continue
+			}
+			break
+		}
+
+		switch choice {
+		case 1:
+			c.showOrders()
+		case 2:
+			c.showUserSpending()
+		case 3:
+			c.showStocks()
+		case 4:
+			c.showMenu()
+		case 5:
+			fmt.Println("Thanks For Using this CLI!")
+			return
+		}
+	}
+
+	if choice == 3 {
+		fmt.Println("Byebye")
 		return
-	default:
-		fmt.Println("Invalid choice")
 	}
 
 	c.showMenu()
 }
 
+// CRUD FUNCTIONS
+func (c *CLI) sebuahFucntionCRUD() {
+	err := c.Handler.SebuahFucntionCRUD()
+	if err != nil {
+		log.Print("Error listing most popular games: ", err)
+		log.Fatal(err)
+	}
+}
+
+// REPORTING FUNCTIONS
 func (c *CLI) showUserSpending() {
 	err := c.Handler.ShowUserSpending()
 	if err != nil {
@@ -98,12 +147,4 @@ func (c *CLI) showOrders() {
 	}
 
 	fmt.Println("Order report displayed successfully.")
-}
-
-func (c *CLI) sebuahFucntionCRUD() {
-	err := c.Handler.SebuahFucntionCRUD()
-	if err != nil {
-		log.Print("Error listing most popular games: ", err)
-		log.Fatal(err)
-	}
 }
