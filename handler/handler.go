@@ -10,6 +10,8 @@ import (
 
 // Handler is the handler interface
 type Handler interface {
+	CreateUser(name, email string) error
+	AddProduct(name string, price, quantity, categoryID int) error
 	UpdateProductCategoryById(id int, newName string) error
 	UpdateUserNameById(id int, newName string) error
 	CreateNewCategory(name string) error
@@ -35,6 +37,34 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 }
 
 // FUNCTIONS BUAT CRUD
+func (h *HandlerImpl) CreateUser(name, email string) error {
+	_, err := h.DB.Exec(`
+	INSERT INTO users (name, email)
+	VALUES (?, ?);`, name, email)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+
+	fmt.Println("You have successfully created a new user")
+
+	return nil
+}
+
+func (h *HandlerImpl) AddProduct(name string, price, quantity, categoryID int) error {
+	_, err := h.DB.Exec(`
+	INSERT INTO products (name, price, quantity, categoryID)
+	VALUES (?, ?, ?, ?);`, name, price, quantity, categoryID)
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+
+	fmt.Println("You have successfully added a new product")
+
+	return nil
+}
+
 func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
 
 	_, err := h.DB.Exec(`

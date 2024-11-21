@@ -136,6 +136,55 @@ func TestDeleteTransactionById(t *testing.T) {
 	}
 }
 
+func TestCreateNewUser(t *testing.T) {
+	// Step 1: Bikin Mock DB
+	mockDB, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to create mock DB: %v", err)
+	}
+	defer mockDB.Close()
+
+	// Step 2: Set expectation
+	mock.ExpectExec("INSERT INTO users \\(name, email\\) VALUES \\(\\?, \\?\\)").
+		WithArgs("Dharma Satrya", "dharmasatrya@gmail.com"). // valuenya
+		WillReturnResult(sqlmock.NewResult(1, 1))            // simulasi 1 row nambah
+
+	// Step 3: panggil
+	handler := NewHandler(mockDB)
+	err = handler.CreateUser("Dharma Satrya", "dharmasatrya@gmail.com")
+
+	// Step 4: assertion
+	assert.NoError(t, err) // Check error
+
+	// check expected output dari function udah sama dengan mock
+	err = mock.ExpectationsWereMet()
+	if err != nil {
+		t.Errorf("Expected query was not executed: %v", err)
+	}
+}
+
+func TestAddProduct(t *testing.T) {
+	mockDB, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to create mock DB: %v", err)
+	}
+	defer mockDB.Close()
+
+	mock.ExpectExec("INSERT INTO products \\(name, price, quantity, categoryID\\) VALUES \\(\\?, \\?, \\?, \\?\\)").
+		WithArgs("The Sims 4", 100000, 10, 2).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	handler := NewHandler(mockDB)
+	err = handler.AddProduct("The Sims 4", 100000, 10, 2)
+
+	assert.NoError(t, err)
+
+	err = mock.ExpectationsWereMet()
+	if err != nil {
+		t.Errorf("Expected query was not executed: %v", err)
+	}
+}
+
 func TestCreateNewCategory(t *testing.T) {
 	// Step 1: Bikin Mock DB
 	mockDB, mock, err := sqlmock.New()
