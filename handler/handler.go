@@ -37,9 +37,7 @@ func NewHandler(db *sql.DB) *HandlerImpl {
 // FUNCTIONS BUAT CRUD
 func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
 
-	fmt.Printf("ini id yang ada di handler -> %v", id)
-
-	rows, err := h.DB.Query(`
+	_, err := h.DB.Exec(`
 	UPDATE product_categories
 	SET name = ?
 	WHERE categoryID = ?;
@@ -48,7 +46,6 @@ func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
-	defer rows.Close()
 
 	fmt.Println("product category name has been changed")
 
@@ -56,7 +53,7 @@ func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
 }
 
 func (h *HandlerImpl) UpdateUserNameById(id int, newName string) error {
-	rows, err := h.DB.Query(`
+	_, err := h.DB.Exec(`
 	UPDATE users
 	SET name = ?
 	WHERE userID = ?;
@@ -65,7 +62,6 @@ func (h *HandlerImpl) UpdateUserNameById(id int, newName string) error {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
-	defer rows.Close()
 
 	fmt.Println("name user has been changed")
 
@@ -73,14 +69,13 @@ func (h *HandlerImpl) UpdateUserNameById(id int, newName string) error {
 }
 
 func (h *HandlerImpl) CreateNewCategory(name string) error {
-	rows, err := h.DB.Query(`
+	_, err := h.DB.Exec(`
 	INSERT INTO product_categories (name)
 	VALUES (?);`, name)
 	if err != nil {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
-	defer rows.Close()
 
 	fmt.Println("You have successfully add new category")
 
@@ -89,7 +84,7 @@ func (h *HandlerImpl) CreateNewCategory(name string) error {
 
 func (h *HandlerImpl) BuyProduct(userID, productID int) error {
 
-	rows, err := h.DB.Query(`
+	_, err := h.DB.Exec(`
 	INSERT INTO transactions (userID, productID, purchasedAt)
 	VALUES (?, ?, NOW());
 	`, userID, productID)
@@ -97,7 +92,6 @@ func (h *HandlerImpl) BuyProduct(userID, productID int) error {
 		log.Print("Error fetching records: ", err)
 		return err
 	}
-	defer rows.Close()
 
 	fmt.Println("You have successfully purchased the item")
 
@@ -106,14 +100,13 @@ func (h *HandlerImpl) BuyProduct(userID, productID int) error {
 
 func (h *HandlerImpl) DeleteTransactionById(transactionID int) error {
 
-	rows, err := h.DB.Query(`
+	_, err := h.DB.Exec(`
 		DELETE FROM transactions WHERE trxID = ?;
 	`, transactionID)
 	if err != nil {
 		log.Print("Error deleting records: ", err)
 		return err
 	}
-	defer rows.Close()
 
 	fmt.Println("You have successfully deleted the transaction")
 
@@ -191,10 +184,6 @@ func (h *HandlerImpl) ShowOrders(month, year int) error {
 	defer rows.Close()
 
 	fmt.Println("Total Game Sales Report:")
-
-	if !rows.Next() {
-		fmt.Println("No records found on this timerange")
-	}
 
 	for rows.Next() {
 		var transactionID int
