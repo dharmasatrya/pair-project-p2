@@ -16,27 +16,27 @@ A. Entity: users
 - name: VARCHAR(50) NOT NULL
 - email: VARCHAR(50) NOT NULL
 
-B. Entity: product_category
+B. Entity: product_categories
 
 - Attributes:
 - categoryID: PK AI 
-- name: VARCHAR(50)
+- name: VARCHAR(50) NOT NULL
 
 C. Entity: products
 
 - Attributes:
 - productID: PK AI 
 - name: VARCHAR(50) NOT NULL
-- price: INT
-- quantity: INT
-- Category FK product_category.categoryID
+- price: INT NOT NULL
+- quantity: INT NOT NULL
+- categoryID FK product_categories.categoryID
 
 D. Entity: transactions
 
 - Attributes:
 - trxID: PK AI 
 - userID: FK users.userID
-- playerID: FK players.playerID
+- productID: FK products.productID
 - purchasedAt: DATE
 
 ## Relationships:
