@@ -55,16 +55,19 @@ func (c *CLI) showMenu() {
 	if choice == 1 {
 		for {
 			fmt.Println("Select function:")
-			fmt.Println("1. Update Product Category by ID")
-			fmt.Println("2. Buy Product")
-			fmt.Println("3. Update Name User by ID")
-			fmt.Println("4. Create New Category")
-			fmt.Println("5. Delete Transaction By ID")
-			fmt.Println("6. Exit")
-			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4/5): ")
+			fmt.Println("1. Create new user")
+			fmt.Println("2. Add a new product")
+			fmt.Println("3. Update Product Category by ID")
+			fmt.Println("4. Buy Product")
+			fmt.Println("5. Update Name User by ID")
+			fmt.Println("6. Create New Category")
+			fmt.Println("7. Delete Transaction By ID")
+			fmt.Println("8. Go Back")
+			fmt.Println("9. Exit")
+			fmt.Print("Enter the number of the report you want to generate: (1 to 9): ")
 			_, err := fmt.Scanln(&choice)
-			if err != nil || choice < 1 || choice > 5 {
-				fmt.Println("Invalid option. Please enter a number between 1 and 5.")
+			if err != nil || choice < 1 || choice > 8 {
+				fmt.Println("Invalid option. Please enter a number between 1 and 9.")
 				fmt.Scanln()
 				continue
 			}
@@ -73,16 +76,22 @@ func (c *CLI) showMenu() {
 
 		switch choice {
 		case 1:
-			c.updateProductCategoryById()
+			c.createUser()
 		case 2:
-			c.buyProduct()
+			c.addProduct()
 		case 3:
-			c.updateUserNamerById()
+			c.updateProductCategoryById()
 		case 4:
-			c.createNewCategory()
+			c.buyProduct()
 		case 5:
-			c.deleteTransactionById()
+			c.updateUserNamerById()
 		case 6:
+			c.createNewCategory()
+		case 7:
+			c.deleteTransactionById()
+		case 8:
+			c.showMenu()
+		case 9:
 			fmt.Println("Thanks For Using this CLI!")
 			os.Exit(0)
 		}
@@ -126,6 +135,53 @@ func (c *CLI) showMenu() {
 }
 
 // CRUD FUNCTIONS
+func (c *CLI) createUser() {
+	var name, email string
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Please input the name of user")
+	if scanner.Scan() {
+		name = scanner.Text()
+	}
+
+	fmt.Println("Please input your email")
+	fmt.Scanln(&email)
+
+	err := c.Handler.CreateUser(name, email)
+	if err != nil {
+		log.Println("Error update name: ", err)
+		log.Fatal(err)
+	}
+}
+
+func (c *CLI) addProduct() {
+	var name string
+	var price, quantity, productID int
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Please input name of product")
+	if scanner.Scan() {
+		name = scanner.Text()
+	}
+
+	fmt.Println("Please input the price")
+	fmt.Scanln(&price)
+
+	fmt.Println("How much would you stock this product?")
+	fmt.Scanln(&quantity)
+
+	c.Handler.ShowProductCategories()
+
+	fmt.Println("Please input the category ID")
+	fmt.Scanln(&productID)
+
+	err := c.Handler.AddProduct(name, price, quantity, productID)
+	if err != nil {
+		log.Println("Error adding product: ", err)
+		log.Fatal(err)
+	}
+}
+
 func (c *CLI) updateProductCategoryById() {
 	var id int
 	var name string
