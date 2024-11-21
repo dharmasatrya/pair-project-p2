@@ -59,7 +59,8 @@ func (c *CLI) showMenu() {
 			fmt.Println("2. Buy Product")
 			fmt.Println("3. Update Name User by ID")
 			fmt.Println("4. Create New Category")
-			fmt.Println("5. Exit")
+			fmt.Println("5. Delete Transaction By ID")
+			fmt.Println("6. Exit")
 			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4/5): ")
 			_, err := fmt.Scanln(&choice)
 			if err != nil || choice < 1 || choice > 5 {
@@ -80,6 +81,8 @@ func (c *CLI) showMenu() {
 		case 4:
 			c.createNewCategory()
 		case 5:
+			c.deleteTransactionById()
+		case 6:
 			fmt.Println("Thanks For Using this CLI!")
 			os.Exit(0)
 		}
@@ -204,6 +207,18 @@ func (c *CLI) buyProduct() {
 	err := c.Handler.BuyProduct(productID, userID)
 	if err != nil {
 		log.Print("Error buying product: ", err)
+		log.Fatal(err)
+	}
+}
+
+func (c *CLI) deleteTransactionById() {
+	var transactionID int
+
+	fmt.Println("Please input transaction ID that you want to delete")
+	fmt.Scanln(&transactionID)
+	err := c.Handler.DeleteTransactionById(transactionID)
+	if err != nil {
+		log.Print("Error deleting transaction: ", err)
 		log.Fatal(err)
 	}
 }
