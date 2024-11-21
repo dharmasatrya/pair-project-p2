@@ -14,6 +14,10 @@ type Handler interface {
 	ShowOrders(month, year int) error
 	ShowStocks() error
 	SebuahFucntionCRUD() error
+	CreateUser(name, email string) error
+	DeleteUser(name, email string) error
+	AddProduct(name string, price float64 ) error
+	DeleteProduct(name string, price float64 ) error
 }
 
 // HandlerImpl is the handler implementation
@@ -43,7 +47,70 @@ func (h *HandlerImpl) SebuahFucntionCRUD() error {
 
 	return nil
 }
+// CREATE USER
+func (h *HandlerImpl) CreateUser(name, email string) error {
+	rows, err := h.DB.Query(
+		`INSERT INTO users (name, email)
+VALUES (?, ?);`, name, email)
 
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("crud selesai")
+
+	return nil
+}
+// DELETE USER
+func (h *HandlerImpl) DeleteUser(name, email string) error {
+	rows, err := h.DB.Query(
+		`DELETE FROM users (name, email)
+VALUES (?, ?);`, name, email)
+
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("crud selesai")
+
+	return nil
+}
+// ADD PRODUCT
+func (h *HandlerImpl) AddProduct(name string, price float64 ) error {
+	rows, err := h.DB.Query(
+		`INSERT INTO products (name, price)
+VALUES (?, ?);`, name, price)
+
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("crud selesai")
+
+	return nil
+}
+// DELETE PRODUCT
+func (h *HandlerImpl) DeleteProduct(name string, price float64 ) error {
+	rows, err := h.DB.Query(
+		`DELETE FROM products (name, price)
+VALUES (?, ?);`, name, price)
+
+	if err != nil {
+		log.Print("Error fetching records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("crud selesai")
+
+	return nil
+}
 // FUNCTION BUAT NAMPILIN REPORT
 func (h *HandlerImpl) ShowUserSpending() error {
 	rows, err := h.DB.Query(`

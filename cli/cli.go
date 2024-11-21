@@ -63,8 +63,13 @@ func (c *CLI) showMenu() {
 			fmt.Println("1. Show Orders")
 			fmt.Println("2. Show Users Spending")
 			fmt.Println("3. Show Current Stocks")
-			fmt.Println("4. Go Back")
-			fmt.Println("5. Exit")
+			fmt.Println("4. Create User")
+			fmt.Println("5. Delete User")
+			fmt.Println("6. Add Product")
+			fmt.Println("7. Delete Product")
+			fmt.Println("8. Show Current Stocks")
+			fmt.Println("9. Go Back")
+			fmt.Println("0. Exit")
 			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4/5): ")
 			_, err := fmt.Scanln(&choice)
 			if err != nil || choice < 1 || choice > 5 {
@@ -81,9 +86,18 @@ func (c *CLI) showMenu() {
 			c.showUserSpending()
 		case 3:
 			c.showStocks()
-		case 4:
+		case 9:
 			c.showMenu()
+		case 4:
+			c.createUser()
 		case 5:
+			c.deleteUser()
+		case 6:
+			c.addProduct()
+		case 7:
+			c.deleteProduct()
+			
+		case 0:
 			fmt.Println("Thanks For Using this CLI!")
 			os.Exit(0)
 		}
@@ -97,6 +111,75 @@ func (c *CLI) sebuahFucntionCRUD() {
 	err := c.Handler.SebuahFucntionCRUD()
 	if err != nil {
 		log.Print("Error listing most popular games: ", err)
+		log.Fatal(err)
+	}
+}
+
+// CREATE USER
+func (c *CLI) createUser() {
+	fmt.Println("Enter user details:")
+	var name string
+	var email string
+	fmt.Println("Please input Name")
+	fmt.Scanln(&name)
+	fmt.Println("Please input Email")
+	fmt.Scanln(&email)
+
+	err := c.Handler.CreateUser(name, email)
+	if err != nil {
+		log.Print("Error Creating User: ", err)
+		log.Fatal(err)
+	}
+}
+
+// DELETE USER
+func (c *CLI) deleteUser() {
+	fmt.Println("Enter user details:")
+	var name string
+	var email string
+	fmt.Println("Please input user Name")
+	fmt.Scanln(&name)
+	fmt.Println("Please input Email")
+	fmt.Scanln(&email)
+
+	err := c.Handler.DeleteUser(name, email)
+	if err != nil {
+		log.Print("Error Editing User: ", err)
+		log.Fatal(err)
+	}
+}
+
+// ADD PRODUCT
+func (c *CLI) addProduct() {
+	fmt.Println("Enter product name:")
+	var name string
+	var price float64
+	fmt.Println("Please input product Name")
+	fmt.Scanln(&name)
+	fmt.Println("Please input product price")
+	fmt.Scanln(&price)
+
+	err := c.Handler.AddProduct(name, price)
+	if err != nil {
+		log.Print("Error adding product", err)
+		log.Fatal(err)
+	}
+}
+
+
+// DELETE PRODUCT
+func (c *CLI) deleteProduct() {
+	fmt.Println("Enter user details:")
+	var name string
+	var price float64
+	fmt.Println("Please input Product Name")
+	fmt.Scanln(&name)
+	fmt.Println("Please input Product Price")
+	fmt.Scanln(&price)
+
+	err := c.Handler.DeleteProduct(name, price)
+	if err != nil {
+		log.Print("Error Editing User: ", err)
 		log.Fatal(err)
 	}
 }
