@@ -5,6 +5,7 @@ import (
 	"game/cli"
 	"game/config"
 	"game/handler"
+	"game/repository"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -12,7 +13,9 @@ import (
 func main() {
 	db := config.ConnectDB()
 
-	handler := handler.NewHandler(db)
+	repository := repository.NewRepository(db)
+
+	handler := handler.NewHandler(repository)
 
 	cli := cli.NewCLI(handler)
 	cli.Init()
