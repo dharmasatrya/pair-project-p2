@@ -162,3 +162,30 @@ func TestCreateNewCategory(t *testing.T) {
 		t.Errorf("Expected query was not executed: %v", err)
 	}
 }
+
+func TestUpdateUserNameById(t *testing.T) {
+	// Step 1: Bikin Mock DB
+	mockDB, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to create mock DB: %v", err)
+	}
+	defer mockDB.Close()
+
+	// Step 2: Set expectation
+	mock.ExpectExec("UPDATE users SET name = \\? WHERE userID = \\?").
+		WithArgs("New User Name", 1).             // The new name and user ID to update
+		WillReturnResult(sqlmock.NewResult(1, 1)) // Simulate a successful update with 1 row affected
+
+	// Step 3: panggil
+	handler := NewHandler(mockDB)                        // Assuming NewHandler initializes the handler
+	err = handler.UpdateUserNameById(1, "New User Name") // Pass the user ID and the new name
+
+	// Step 4: assertion
+	assert.NoError(t, err) // Check if no error occurred
+
+	// check expected output dari function udah sama dengan mock
+	err = mock.ExpectationsWereMet()
+	if err != nil {
+		t.Errorf("Expected query was not executed: %v", err)
+	}
+}
