@@ -135,3 +135,30 @@ func TestDeleteTransactionById(t *testing.T) {
 		t.Errorf("Expected query was not executed: %v", err)
 	}
 }
+
+func TestCreateNewCategory(t *testing.T) {
+	// Step 1: Bikin Mock DB
+	mockDB, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to create mock DB: %v", err)
+	}
+	defer mockDB.Close()
+
+	// Step 2: Set expectation
+	mock.ExpectExec(`INSERT INTO product_categories \(name\) VALUES \(\?\)`).
+		WithArgs("New Product Category").         // valuenya
+		WillReturnResult(sqlmock.NewResult(1, 1)) // simulasi 1 row nambah
+
+	// Step 3: panggil
+	handler := NewHandler(mockDB)
+	err = handler.CreateNewCategory("New Product Category")
+
+	// Step 4: assertion
+	assert.NoError(t, err) // Check error
+
+	// check expected output dari function udah sama dengan mock
+	err = mock.ExpectationsWereMet()
+	if err != nil {
+		t.Errorf("Expected query was not executed: %v", err)
+	}
+}
