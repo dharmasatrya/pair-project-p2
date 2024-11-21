@@ -11,7 +11,7 @@ import (
 // Handler is the handler interface
 type Handler interface {
 	UpdateProductCategoryById(id int, newName string) error
-	UpdateNameUserById(id int, newName string) error
+	UpdateUserNameById(id int, newName string) error
 	CreateNewCategory(name string) error
 	BuyProduct(userID, productID int) error
 	ShowUserSpending() error
@@ -54,7 +54,7 @@ func (h *HandlerImpl) UpdateProductCategoryById(id int, newName string) error {
 	return nil
 }
 
-func (h *HandlerImpl) UpdateNameUserById(id int, newName string) error {
+func (h *HandlerImpl) UpdateUserNameById(id int, newName string) error {
 	rows, err := h.DB.Query(`
 	UPDATE users
 	SET name = ?
