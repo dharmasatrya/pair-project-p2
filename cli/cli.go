@@ -33,8 +33,8 @@ func (c *CLI) showMenu() {
 	var choice int
 
 	for {
-		fmt.Println("Select function:")
-		fmt.Println("1. function crud")
+		fmt.Println("Select a function:")
+		fmt.Println("1. CRUD Function")
 		fmt.Println("2. Reportings")
 		fmt.Println("3. Exit")
 		fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
@@ -60,10 +60,10 @@ func (c *CLI) showMenu() {
 			fmt.Println("3. Update Name User by ID")
 			fmt.Println("4. Create New Category")
 			fmt.Println("5. Exit")
-			fmt.Print("Enter the number of the report you want to generate: (1/2/3): ")
+			fmt.Print("Enter the number of the report you want to generate: (1/2/3/4/5): ")
 			_, err := fmt.Scanln(&choice)
 			if err != nil || choice < 1 || choice > 5 {
-				fmt.Println("Invalid option. Please enter a number between 1 and 3.")
+				fmt.Println("Invalid option. Please enter a number between 1 and 5.")
 				fmt.Scanln()
 				continue
 			}
