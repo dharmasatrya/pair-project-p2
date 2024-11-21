@@ -14,6 +14,7 @@ type Handler interface {
 	UpdateUserNameById(id int, newName string) error
 	CreateNewCategory(name string) error
 	BuyProduct(userID, productID int) error
+	DeleteTransactionById(transactionID int) error
 	ShowUserSpending() error
 	ShowOrders(month, year int) error
 	ShowStocks() error
@@ -99,6 +100,22 @@ func (h *HandlerImpl) BuyProduct(userID, productID int) error {
 	defer rows.Close()
 
 	fmt.Println("You have successfully purchased the item")
+
+	return nil
+}
+
+func (h *HandlerImpl) DeleteTransactionById(transactionID int) error {
+
+	rows, err := h.DB.Query(`
+		DELETE FROM transactions WHERE trxID = ?;
+	`, transactionID)
+	if err != nil {
+		log.Print("Error deleting records: ", err)
+		return err
+	}
+	defer rows.Close()
+
+	fmt.Println("You have successfully deleted the transaction")
 
 	return nil
 }
