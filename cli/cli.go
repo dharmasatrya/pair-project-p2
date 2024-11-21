@@ -76,7 +76,7 @@ func (c *CLI) showMenu() {
 		case 2:
 			c.buyProduct()
 		case 3:
-			c.updateNameUserById()
+			c.updateUserNamerById()
 		case 4:
 			c.createNewCategory()
 		case 5:
@@ -141,7 +141,7 @@ func (c *CLI) updateProductCategoryById() {
 	}
 }
 
-func (c *CLI) updateNameUserById() {
+func (c *CLI) updateUserNamerById() {
 	var id int
 	var name string
 	scanner := bufio.NewScanner(os.Stdin)
@@ -155,7 +155,7 @@ func (c *CLI) updateNameUserById() {
 	if scanner.Scan() {
 		name = scanner.Text()
 	}
-	err := c.Handler.UpdateNameUserById(id, name)
+	err := c.Handler.UpdateUserNameById(id, name)
 	if err != nil {
 		log.Println("Error update name: ", err)
 		log.Fatal(err)
