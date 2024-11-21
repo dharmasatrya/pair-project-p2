@@ -29,15 +29,15 @@ C. Entity: products
 - name: VARCHAR(50) NOT NULL
 - price: INT NOT NULL
 - quantity: INT NOT NULL
-- categoryID FK product_categories.categoryID
+- categoryID FK product_categories.categoryID NOT NULL
 
 D. Entity: transactions
 
 - Attributes:
 - trxID: PK AI 
-- userID: FK users.userID
-- productID: FK products.productID
-- purchasedAt: DATE
+- userID: FK users.userID NOT NULL
+- productID: FK products.productID NOT NULL
+- purchasedAt: DATE NOT NULL
 
 ## Relationships:
 - Table_Name to Table_Name: (e.g., Customers to Orders)
@@ -56,6 +56,7 @@ C. Type: One to Many
 
 ## Integrity Constraints:
 - self explanatory
+- Create trigger update_product_quantity_after_transaction: This trigger decreases the quantity by 1 for the product involved in a new transaction.
 
 ## Note
 - etc ...
