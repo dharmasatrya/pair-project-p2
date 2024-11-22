@@ -59,14 +59,14 @@ func (c *CLI) showMenu() {
 			fmt.Println("2. Add a new product")
 			fmt.Println("3. Update Product Category by ID")
 			fmt.Println("4. Buy Product")
-			fmt.Println("5. Update Name User by ID")
+			fmt.Println("5. Update User Name by ID")
 			fmt.Println("6. Create New Category")
 			fmt.Println("7. Delete Transaction By ID")
 			fmt.Println("8. Go Back")
 			fmt.Println("9. Exit")
 			fmt.Print("Enter the number of the report you want to generate: (1 to 9): ")
 			_, err := fmt.Scanln(&choice)
-			if err != nil || choice < 1 || choice > 8 {
+			if err != nil || choice < 1 || choice > 9 {
 				fmt.Println("Invalid option. Please enter a number between 1 and 9.")
 				fmt.Scanln()
 				continue
@@ -149,7 +149,7 @@ func (c *CLI) createUser() {
 
 	err := c.Handler.CreateUser(name, email)
 	if err != nil {
-		log.Println("Error update name: ", err)
+		log.Println("Error creating user: ", err)
 		log.Fatal(err)
 	}
 }
@@ -195,7 +195,7 @@ func (c *CLI) updateProductCategoryById() {
 	}
 	err := c.Handler.UpdateProductCategoryById(id, name)
 	if err != nil {
-		log.Print("Error listing most popular games: ", err)
+		log.Print("Error updating product category by id games: ", err)
 		log.Fatal(err)
 	}
 }
@@ -216,7 +216,7 @@ func (c *CLI) updateUserNamerById() {
 	}
 	err := c.Handler.UpdateUserNameById(id, name)
 	if err != nil {
-		log.Println("Error update name: ", err)
+		log.Println("Error updating name: ", err)
 		log.Fatal(err)
 	}
 }
@@ -232,7 +232,7 @@ func (c *CLI) createNewCategory() {
 	}
 	err := c.Handler.CreateNewCategory(name)
 	if err != nil {
-		log.Print("Error create new category product: ", err)
+		log.Print("Error create new category: ", err)
 		log.Fatal(err)
 	}
 }
@@ -312,7 +312,7 @@ func (c *CLI) showOrders() {
 	for {
 		fmt.Print("Please input the year of the report (e.g., 2024): ")
 		_, err := fmt.Scanln(&year)
-		if err != nil || year < 2024 || year > 2024 {
+		if err != nil || year < 2023 || year > 2024 {
 			fmt.Println("Invalid year. Please enter a valid year.")
 			continue
 		}
