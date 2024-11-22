@@ -66,7 +66,7 @@ func (c *CLI) showMenu() {
 			fmt.Println("9. Exit")
 			fmt.Print("Enter the number of the report you want to generate: (1 to 9): ")
 			_, err := fmt.Scanln(&choice)
-			if err != nil || choice < 1 || choice > 8 {
+			if err != nil || choice < 1 || choice > 9 {
 				fmt.Println("Invalid option. Please enter a number between 1 and 9.")
 				fmt.Scanln()
 				continue
