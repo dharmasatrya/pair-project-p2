@@ -16,4 +16,5 @@ func main() {
 
 	cli := cli.NewCLI(handler)
 	cli.Init()
+	defer db.Close()
 }
